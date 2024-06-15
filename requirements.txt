@@ -8,3 +8,4 @@ numpy
 scipy
 beautifulsoup4
 nltk
+wordcloud
