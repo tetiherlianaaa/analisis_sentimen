@@ -1,4 +1,5 @@
 import streamlit as st
+from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_score
 
 # Set the page configuration at the top of the script
 st.set_page_config(page_title="Analisis Sentimen", page_icon="icon/classification.png")
