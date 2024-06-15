@@ -1,5 +1,6 @@
-streamlit
-pandas
+streamlit==1.35.0
+pandas>=1.0.0
+nltk
 matplotlib
 scikit-learn
 matplotlib
@@ -7,7 +8,6 @@ seaborn
 numpy
 scipy
 beautifulsoup4
-nltk
 wordcloud
 openpyxl
 os
