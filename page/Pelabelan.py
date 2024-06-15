@@ -7,10 +7,13 @@ import csv
 import io
 import nltk
 
-# Unduh stop words dan tokenizer
-nltk.download('punkt')
-nltk.download('stopwords')
-stop_words = set(stopwords.words('indonesian'))
+# Download NLTK data
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', quiet=True)
+    nltk.download('stopwords')
+    stop_words = set(stopwords.words('indonesian'))
 
 # Fungsi untuk memuat leksikon dari file CSV
 def load_lexicon(file):
