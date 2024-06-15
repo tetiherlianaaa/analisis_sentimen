@@ -11,7 +11,6 @@ nltk
 wordcloud
 openpyxl
 os
-
 Ignored the following versions that require a different python version:
 0.55.2 Requires-Python <3.5;
 1.21.2 Requires-Python >=3.7,<3.11;
