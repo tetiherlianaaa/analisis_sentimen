@@ -9,3 +9,4 @@ scipy
 beautifulsoup4
 nltk
 wordcloud
+openpyxl
