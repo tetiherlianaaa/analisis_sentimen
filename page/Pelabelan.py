@@ -8,12 +8,9 @@ import io
 import nltk
 
 # Download NLTK data
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt', quiet=True)
-    nltk.download('stopwords', quiet=True)
-    stop_words = set(stopwords.words('indonesian'))
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
+stop_words = set(stopwords.words('indonesian'))
 
 # Function to load lexicon from CSV file
 def load_lexicon(file):
@@ -28,33 +25,19 @@ def load_lexicon(file):
 
 # Function to clean and process text
 def preprocess_text(text):
-    cleaned_text = ''
-    for char in text:
-        if (48 <= ord(char) <= 57) or (65 <= ord(char) <= 90) or (97 <= ord(char) <= 122):
-            cleaned_text += char
-        else:
-            cleaned_text += ' '  # Replace non-alphanumeric characters with space
-    text = cleaned_text
-    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
-    text = text.lower()
-    text = re.sub(r'[^\w\s]', '', text)
+    # Replace non-alphanumeric characters with space and lowercase
+    text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text).lower()
     
-    casefolding = text.lower()
-    handling_tandabaca = re.sub(r'[^\w\s]', '', casefolding)
-    handling_urls_mentions_hashtags = re.sub(r'http\S+|@\S+|#\S+', '', handling_tandabaca)
-    tokenize = word_tokenize(handling_urls_mentions_hashtags)
-    tweet_tokens_WSW = [word for word in tokenize if word not in stop_words]
+    # Further cleaning and tokenization
+    text = re.sub(r'http\S+|@\S+|#\S+', '', text)  # Remove URLs, mentions, hashtags
+    tokens = word_tokenize(text)  # Tokenize
+    tokens_without_stopwords = [word for word in tokens if word not in stop_words]  # Remove stop words
 
-    return casefolding, handling_tandabaca, handling_urls_mentions_hashtags, tokenize, tweet_tokens_WSW
+    return text, tokens, tokens_without_stopwords
 
 # Function for sentiment analysis
-def sentiment_analysis_lexicon_indonesia(text, lexicon_positive, lexicon_negative):
-    score = 0
-    for word in text:
-        if word in lexicon_positive:
-            score += lexicon_positive[word]
-        if word in lexicon_negative:
-            score += lexicon_negative[word]
+def sentiment_analysis_lexicon_indonesia(tokens, lexicon_positive, lexicon_negative):
+    score = sum(lexicon_positive.get(word, 0) + lexicon_negative.get(word, 0) for word in tokens)
     if score > 0:
         polarity = 'positive'
     elif score < 0:
@@ -87,76 +70,53 @@ def main():
         lexicon_negative = load_lexicon(uploaded_negative_lexicon)
         
         # Process each sentence
-        sentences = df['Content'].tolist()
-        casefoldings = []
-        handling_tandabacas = []
-        handling_urls_mentions_hashtags_list = []
-        tokenizes = []
-        tweet_tokens_WSWs = []
-        polarity_scores = []
-        labels = []
+        results = [process_sentence(sentence, lexicon_positive, lexicon_negative) 
+                   for sentence in df['Content'] if isinstance(sentence, str)]
+        
+        if results:
+            casefoldings, tokenizes, tweet_tokens_WSWs, polarity_scores, labels = zip(*results)
 
-        for sentence in sentences:
-            if isinstance(sentence, str):  # Ensure processing only strings
-                casefolding, handling_tandabaca, handling_urls_mentions_hashtags, tokenize, tweet_tokens_WSW = preprocess_text(sentence)
-                score, polarity = sentiment_analysis_lexicon_indonesia(tweet_tokens_WSW, lexicon_positive, lexicon_negative)
-            else:
-                casefolding = handling_tandabaca = handling_urls_mentions_hashtags = ''
-                tokenize = tweet_tokens_WSW = []
-                score = 0
-                polarity = 'neutral'
+            df['casefolding'] = casefoldings
+            df['tokenize'] = tokenizes
+            df['tweet_tokens_WSW'] = tweet_tokens_WSWs
+            df['polarity_score'] = polarity_scores
+            df['polarity'] = labels
 
-            casefoldings.append(casefolding)
-            handling_tandabacas.append(handling_tandabaca)
-            handling_urls_mentions_hashtags_list.append(handling_urls_mentions_hashtags)
-            tokenizes.append(tokenize)
-            tweet_tokens_WSWs.append(tweet_tokens_WSW)
-            polarity_scores.append(score)
-            labels.append(polarity)
+            # Remove unnecessary columns
+            columns_to_remove = ['Score', 'At', 'Unnamed: 4', 'Unnamed: 5', 'Unnamed: 6']
+            df.drop(columns=[col for col in columns_to_remove if col in df.columns], inplace=True)
 
-        df['casefolding'] = casefoldings
-        df['handling_tandabaca'] = handling_tandabacas
-        df['handling_urls_mentions_hashtags'] = handling_urls_mentions_hashtags_list
-        df['tokenize'] = tokenizes
-        df['tweet_tokens_WSW'] = tweet_tokens_WSWs
-        df['polarity_score'] = polarity_scores
-        df['polarity'] = labels
+            # Display DataFrame
+            st.write(df)
 
-        # Remove unnecessary columns
-        if 'Score' in df.columns: df.drop(columns=['Score'], inplace=True)
-        if 'At' in df.columns: df.drop(columns=['At'], inplace=True)
-        if 'Unnamed: 4' in df.columns: df.drop(columns=['Unnamed: 4'], inplace=True)
-        if 'Unnamed: 5' in df.columns: df.drop(columns=['Unnamed: 5'], inplace=True)
-        if 'Unnamed: 6' in df.columns: df.drop(columns=['Unnamed: 6'], inplace=True)
+            # Download result file
+            csv_data = df.to_csv(index=False).encode('utf-8')
+            st.download_button(label="Download CSV", data=csv_data, file_name='labeled_sentiment_fixed.csv', mime='text/csv')
 
-        # Display DataFrame
-        st.write(df)
-
-        # Download result file
-        csv_data = df.to_csv(index=False).encode('utf-8')
-        st.download_button(label="Download CSV", data=csv_data, file_name='labeled_sentiment_fixed.csv', mime='text/csv')
-
-        # Create buffer to store Excel data
-        excel_buffer = io.BytesIO()
-        df.to_excel(excel_buffer, index=False)
-        excel_buffer.seek(0)
-        st.download_button(label="Download Excel", data=excel_buffer, file_name='labeled_sentiment_fixed.xlsx')
+            # Create buffer to store Excel data
+            excel_buffer = io.BytesIO()
+            df.to_excel(excel_buffer, index=False)
+            excel_buffer.seek(0)
+            st.download_button(label="Download Excel", data=excel_buffer, file_name='labeled_sentiment_fixed.xlsx')
 
     # Single text input for sentiment analysis
     input_text = st.text_area("Enter text for sentiment analysis", "")
 
-    if input_text:
-        casefolding, handling_tandabaca, handling_urls_mentions_hashtags, tokenize, tweet_tokens_WSW = preprocess_text(input_text)
-        score, polarity = sentiment_analysis_lexicon_indonesia(tweet_tokens_WSW, lexicon_positive, lexicon_negative)
+    if input_text and uploaded_positive_lexicon and uploaded_negative_lexicon:
+        _, tokens, tokens_without_stopwords = preprocess_text(input_text)
+        score, polarity = sentiment_analysis_lexicon_indonesia(tokens_without_stopwords, lexicon_positive, lexicon_negative)
         
         st.write("Analysis Result:")
-        st.write("Casefolding:", casefolding)
-        st.write("Handling Punctuation:", handling_tandabaca)
-        st.write("Handling URLs, Mentions, Hashtags:", handling_urls_mentions_hashtags)
-        st.write("Tokenize:", tokenize)
-        st.write("Tokens without Stop Words:", tweet_tokens_WSW)
+        st.write("Casefolding:", input_text.lower())
+        st.write("Tokenize:", tokens)
+        st.write("Tokens without Stop Words:", tokens_without_stopwords)
         st.write("Polarity Score:", score)
         st.write("Polarity:", polarity)
+
+def process_sentence(sentence, lexicon_positive, lexicon_negative):
+    casefolding, tokens, tokens_without_stopwords = preprocess_text(sentence)
+    score, polarity = sentiment_analysis_lexicon_indonesia(tokens_without_stopwords, lexicon_positive, lexicon_negative)
+    return casefolding, tokens, tokens_without_stopwords, score, polarity
 
 if __name__ == '__main__':
     main()
