@@ -1,4 +1,3 @@
-page.fetch
 streamlit
 pandas
 ast
@@ -15,3 +14,7 @@ urlopen
 word_tokenize
 PorterStemmer
 display_pie_chart
+seaborn
+scikit-learn
+numpy
+scipy
