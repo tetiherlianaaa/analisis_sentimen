@@ -11,12 +11,6 @@ def main():
 Aplikasi ini adalah program Python yang menggunakan library Streamlit, Pandas, NLTK, dan beberapa library lainnya. Aplikasi ini digunakan untuk melakukan preprocessing pada teks dan mendeteksi kata-kata tidak baku. Beberapa fitur yang tersedia di aplikasi ini antara lain:
 
     a. User mengunggah file kamus KBBI dalam format CSV, TXT, XLS, atau XLSX.
-    b. User mengunggah file data yang akan diproses dalam format CSV.
-    c. Sistem melakukan preprocessing pada teks, termasuk penghapusan URL, mention, dan hashtag, serta tanda baca dan karakter non-ASCII.
-    d. Sistem mencari kata slang dalam teks berdasarkan kamus KBBI.
-    e. Sistem menghapus kata-kata berimbuhan dalam teks.
-    f. Sistem menampilkan hasil preprocessing dan kata-kata tidak baku.
-    g. User bisa mengeskpor kata slang ke file teks (TXT) atau file CSV.
 
     """)
     
