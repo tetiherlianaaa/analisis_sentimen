@@ -10,3 +10,4 @@ beautifulsoup4
 nltk
 wordcloud
 openpyxl
+os

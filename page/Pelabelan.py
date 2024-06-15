@@ -7,11 +7,15 @@ import csv
 import io
 import nltk
 
-# Download NLTK data
+# Download NLTK data files
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
     nltk.download('punkt', quiet=True)
+
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
     nltk.download('stopwords')
 
 # Initialize stop_words globally
