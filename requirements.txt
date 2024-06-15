@@ -6,4 +6,4 @@ matplotlib
 seaborn
 numpy
 scipy
-BeautifulSoup
+beautifulsoup4
