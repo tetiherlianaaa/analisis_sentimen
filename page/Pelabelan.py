@@ -13,8 +13,6 @@ try:
 except LookupError:
     nltk.download('punkt', quiet=True)
     nltk.download('stopwords')
-
-# Initialize stop_words globally
 stop_words = set(stopwords.words('indonesian'))
 
 # Fungsi untuk memuat leksikon dari file CSV
@@ -159,6 +157,3 @@ def main():
         st.write("Tokens tanpa Stop Words:", tweet_tokens_WSW)
         st.write("Polarity Score:", score)
         st.write("Polarity:", polarity)
-
-if __name__ == "__main__":
-    main()
