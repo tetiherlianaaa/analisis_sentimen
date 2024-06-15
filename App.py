@@ -5,7 +5,6 @@ st.set_page_config(page_title="Analisis Sentimen", page_icon="icon/classificatio
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_score
 from page.fetch import display_pie_chart
 
 import page.home
