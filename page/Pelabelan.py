@@ -1,30 +1,21 @@
-import streamlit as st
-import pandas as pd
-import re
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import csv
 import io
-import nltk
 
-# Download NLTK data files
+# Download NLTK data
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
     nltk.download('punkt', quiet=True)
+    nltk.download('stopwords', quiet=True)
+    stop_words = set(stopwords.words('indonesian'))
 
-try:
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-    nltk.download('stopwords')
-
-# Initialize stop_words globally
-stop_words = set(stopwords.words('indonesian'))
-
-# Fungsi untuk memuat leksikon dari file CSV
+# Function to load lexicon from CSV file
 def load_lexicon(file):
     lexicon = {}
-    # Membungkus file BytesIO dengan TextIOWrapper
+    # Wrap BytesIO file with TextIOWrapper
     file = io.TextIOWrapper(file, encoding='utf-8')
     reader = csv.reader(file, delimiter=',')
     for row in reader:
@@ -32,14 +23,14 @@ def load_lexicon(file):
             lexicon[row[0]] = int(row[1])
     return lexicon
 
-# Fungsi untuk membersihkan dan memproses teks
+# Function to clean and process text
 def preprocess_text(text):
     cleaned_text = ''
     for char in text:
         if (48 <= ord(char) <= 57) or (65 <= ord(char) <= 90) or (97 <= ord(char) <= 122):
             cleaned_text += char
         else:
-            cleaned_text += ' '  # Ganti karakter non-huruf dan non-angka dengan spasi
+            cleaned_text += ' '  # Replace non-alphanumeric characters with space
     text = cleaned_text
     text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
     text = text.lower()
@@ -53,7 +44,7 @@ def preprocess_text(text):
 
     return casefolding, handling_tandabaca, handling_urls_mentions_hashtags, tokenize, tweet_tokens_WSW
 
-# Fungsi untuk analisis sentimen
+# Function for sentiment analysis
 def sentiment_analysis_lexicon_indonesia(text, lexicon_positive, lexicon_negative):
     score = 0
     for word in text:
@@ -72,27 +63,27 @@ def sentiment_analysis_lexicon_indonesia(text, lexicon_positive, lexicon_negativ
 def main():
     st.title("Pelabelan InSet")
 
-    # Unggah file Excel
-    uploaded_file = st.file_uploader("Unggah file Excel", type=["xlsx"])
+    # Upload Excel file
+    uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
 
-    # Unggah file leksikon positif
-    uploaded_positive_lexicon = st.file_uploader("Unggah file leksikon positif (CSV)", type=["csv"])
+    # Upload positive lexicon file
+    uploaded_positive_lexicon = st.file_uploader("Upload positive lexicon (CSV)", type=["csv"])
 
-    # Unggah file leksikon negatif
-    uploaded_negative_lexicon = st.file_uploader("Unggah file leksikon negatif (CSV)", type=["csv"])
+    # Upload negative lexicon file
+    uploaded_negative_lexicon = st.file_uploader("Upload negative lexicon (CSV)", type=["csv"])
 
     if uploaded_file and uploaded_positive_lexicon and uploaded_negative_lexicon:
-        # Memuat data dari file yang diunggah
+        # Load data from uploaded file
         df = pd.read_excel(uploaded_file)
 
-        # Batasi jumlah data menjadi 3000 baris
+        # Limit data to 3000 rows
         df = df.head(3000)
         
-        # Memuat leksikon positif dan negatif
+        # Load positive and negative lexicon
         lexicon_positive = load_lexicon(uploaded_positive_lexicon)
         lexicon_negative = load_lexicon(uploaded_negative_lexicon)
         
-        # Proses setiap kalimat
+        # Process each sentence
         sentences = df['Content'].tolist()
         casefoldings = []
         handling_tandabacas = []
@@ -103,7 +94,7 @@ def main():
         labels = []
 
         for sentence in sentences:
-            if isinstance(sentence, str):  # Pastikan hanya memproses string
+            if isinstance(sentence, str):  # Ensure processing only strings
                 casefolding, handling_tandabaca, handling_urls_mentions_hashtags, tokenize, tweet_tokens_WSW = preprocess_text(sentence)
                 score, polarity = sentiment_analysis_lexicon_indonesia(tweet_tokens_WSW, lexicon_positive, lexicon_negative)
             else:
@@ -128,41 +119,41 @@ def main():
         df['polarity_score'] = polarity_scores
         df['polarity'] = labels
 
-        # Hapus kolom yang tidak diperlukan
+        # Remove unnecessary columns
         if 'Score' in df.columns: df.drop(columns=['Score'], inplace=True)
         if 'At' in df.columns: df.drop(columns=['At'], inplace=True)
         if 'Unnamed: 4' in df.columns: df.drop(columns=['Unnamed: 4'], inplace=True)
         if 'Unnamed: 5' in df.columns: df.drop(columns=['Unnamed: 5'], inplace=True)
         if 'Unnamed: 6' in df.columns: df.drop(columns=['Unnamed: 6'], inplace=True)
 
-        # Menampilkan DataFrame
+        # Display DataFrame
         st.write(df)
 
-        # Unduh file hasil
-        csv = df.to_csv(index=False).encode('utf-8')
-        st.download_button(label="Unduh CSV", data=csv, file_name='labeled_sentiment_fixed.csv', mime='text/csv')
+        # Download result file
+        csv_data = df.to_csv(index=False).encode('utf-8')
+        st.download_button(label="Download CSV", data=csv_data, file_name='labeled_sentiment_fixed.csv', mime='text/csv')
 
-        # Membuat buffer untuk menyimpan data Excel
+        # Create buffer to store Excel data
         excel_buffer = io.BytesIO()
         df.to_excel(excel_buffer, index=False)
         excel_buffer.seek(0)
-        st.download_button(label="Unduh Excel", data=excel_buffer, file_name='labeled_sentiment_fixed.xlsx')
+        st.download_button(label="Download Excel", data=excel_buffer, file_name='labeled_sentiment_fixed.xlsx')
 
-    # Input teks tunggal untuk analisis
-    input_text = st.text_area("Masukkan teks untuk analisis sentimen", "")
+    # Single text input for sentiment analysis
+    input_text = st.text_area("Enter text for sentiment analysis", "")
 
     if input_text:
         casefolding, handling_tandabaca, handling_urls_mentions_hashtags, tokenize, tweet_tokens_WSW = preprocess_text(input_text)
         score, polarity = sentiment_analysis_lexicon_indonesia(tweet_tokens_WSW, lexicon_positive, lexicon_negative)
         
-        st.write("Hasil Analisis:")
+        st.write("Analysis Result:")
         st.write("Casefolding:", casefolding)
-        st.write("Handling Tanda Baca:", handling_tandabaca)
+        st.write("Handling Punctuation:", handling_tandabaca)
         st.write("Handling URLs, Mentions, Hashtags:", handling_urls_mentions_hashtags)
         st.write("Tokenize:", tokenize)
-        st.write("Tokens tanpa Stop Words:", tweet_tokens_WSW)
+        st.write("Tokens without Stop Words:", tweet_tokens_WSW)
         st.write("Polarity Score:", score)
         st.write("Polarity:", polarity)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
