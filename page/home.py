@@ -2,7 +2,7 @@ import streamlit as st
     
 def main():
     st.title("BERANDA")
-    st.write("Selamat Datang Di Aplikasi Analisis Sentimen!!!")
+    st.write("Selamat Datang di Aplikasi Analisis Sentimen!!!")
     st.markdown('<p style="font-family: Times New Roman; font-size: 25px; font-weight: bold;">Pendeteksi Kata Slang</p>', unsafe_allow_html=True)
 
     # Menambahkan penjelasan mengenai aplikasi
