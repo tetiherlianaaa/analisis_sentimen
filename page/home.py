@@ -11,6 +11,8 @@ def main():
  Berikut adalah tahapan yang dilakukan dalam aplikasi ini:
 
     a. User mengunggah file kamus KBBI dalam format CSV, TXT, XLS, atau XLSX.
+    b. 
+    c. 
 
     """)
     
