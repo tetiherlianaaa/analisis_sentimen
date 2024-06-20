@@ -2,7 +2,7 @@ import streamlit as st
 from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_score
 
 # Set the page configuration at the top of the script
-st.set_page_config(page_title="Analisis Sentimen", page_icon="icon/classification.png")
+#st.set_page_config(page_title="Analisis Sentimen", page_icon="icon/classification.png")
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -55,7 +55,6 @@ def main():
         PAGES[page].main()
     
    #st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">About App</p>', unsafe_allow_html=True)
-
 
 if __name__ == "__main__":
     main()
