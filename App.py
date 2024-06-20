@@ -48,7 +48,7 @@ def main():
 
     st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">Natural Language Processing</p>', unsafe_allow_html=True)
     
-    #page = st.sidebar.radio("Pre-processing", list(PAGES.keys()))
+    page = st.sidebar.radio("Pre-processing", list(PAGES.keys()))
 
     with st.spinner(f"Loading {page} ..."):
         PAGES[page].main()
