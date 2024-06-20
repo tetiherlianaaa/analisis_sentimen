@@ -55,6 +55,12 @@ def main():
         PAGES[page].main()
     
    #st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">About App</p>', unsafe_allow_html=True)
+    
+    st.sidebar.info(
+        """
+
+        """
+    )
 
 if __name__ == "__main__":
     main()
