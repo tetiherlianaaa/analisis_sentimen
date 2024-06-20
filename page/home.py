@@ -8,7 +8,9 @@ def main():
     # Menambahkan penjelasan mengenai aplikasi
     st.markdown("""
     
-Aplikasi ini adalah program Python yang menggunakan library Streamlit, Pandas, NLTK, dan beberapa library lainnya. Aplikasi ini digunakan untuk melakukan preprocessing pada teks dan mendeteksi kata-kata tidak baku. Beberapa fitur yang tersedia di aplikasi ini antara lain:
+Aplikasi ini dirancang untuk membantu Anda dalam memahami opini dan sentimen dari teks,
+seperti ulasan produk, komentar media sosial, dan berbagai sumber lainnya. Dengan menggunakan
+algoritma K-Nearest Neighbors (KNN) dan Naive Bayes. Berikut adalah tahapan yang dilakukan dalam aplikasi ini:
 
     a. User mengunggah file kamus KBBI dalam format CSV, TXT, XLS, atau XLSX.
 
