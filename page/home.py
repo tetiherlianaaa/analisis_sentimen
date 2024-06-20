@@ -4,13 +4,9 @@ def main():
     st.title("Beranda")
     st.write("Selamat datang di aplikasi Analisis Sentimen! ")
     st.markdown("""
-    Selamat datang di aplikasi Analisis Sentimen kami yang canggih dan mudah digunakan! Aplikasi
-    ini dirancang untuk membantu Anda dalam memahami opini dan sentimen dari teks, seperti ulasan 
-    produk, komentar media sosial, dan berbagai sumber lainnya. Dengan menggunakan algoritma K
-    Nearest Neighbors (KNN) dan Naive Bayes, aplikasi kami memastikan analisis yang akurat dan
-    cepat. Berikut adalah tahapan yang dilakukan dalam aplikasi ini:
+    Aplikasi ini dirancang untuk membantu dalam memahami opini dan sentimen dari teks, yakni komentar aplikasi. Dengan menggunakan algoritma K-Nearest Neighbors (KNN) dan Naive Bayes, aplikasi ini dapat memberikan informasi terkait analisis sentimen beserta dengan beberapa tahapan prosesnya. Berikut adalah tahapan analisis sentimen yang dilakukan dalam aplikasi ini:
     """)
-    
+
     st.markdown('<p style="font-family: Times New Roman; font-size: 32px; font-weight: bold;">Pendeteksi Kata Slang</p>', unsafe_allow_html=True)
 
     # Menambahkan penjelasan mengenai aplikasi
