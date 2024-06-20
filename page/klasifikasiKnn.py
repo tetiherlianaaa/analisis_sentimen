@@ -82,11 +82,8 @@ def main():
 
         tfidf, labels = data['tfidf'].tolist(), data['polarity'].tolist()
 
-        # Pilih nilai K
-        k_value = st.slider("Pilih nilai K:", 1, 10, 3)
-
         train_tfidf, train_labels, test_tfidf, test_labels = train_test_split(tfidf, labels)
-        predictions = knn(train_tfidf, train_labels, test_tfidf, k=k_value)
+        predictions = knn(train_tfidf, train_labels, test_tfidf, k=3)
         accuracy = calculate_accuracy(test_labels, predictions)
         st.write(f"Akurasi: {accuracy * 100:.2f}%")
 
@@ -101,7 +98,8 @@ def main():
         plt.title('Confusion Matrix')
         st.pyplot(fig)
 
-        data['polarity_predicted'] = knn(train_tfidf, train_labels, tfidf, k=k_value)
+        k_unit = 5
+        data['polarity_predicted'] = knn(train_tfidf, train_labels, tfidf, k=k_unit)
 
         @st.cache_data
         def convert_df(df):
@@ -115,7 +113,7 @@ def main():
         if input_text:
             corpus = data[text_column].tolist()
             new_input = compute_tfidf_single(input_text, corpus)
-            new_prediction = knn(train_tfidf, train_labels, [new_input], k=k_value)
+            new_prediction = knn(train_tfidf, train_labels, [new_input], k=k_unit)
             st.write(f"Kalimat: {input_text}")
             st.write(f"Prediksi Polarity: {new_prediction[0]}")
 
