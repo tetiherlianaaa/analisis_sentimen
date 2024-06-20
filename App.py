@@ -47,7 +47,7 @@ def main():
     set_page_config()
 
     #st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">Analisis Sentimen</p>', unsafe_allow_html=True)
-    st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold; margin-top: 0; margin-bottom: 0;">Analisis Sentimen</p>', unsafe_allow_html=True)
+    st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold; margin-top: 0; margin-bottom: 0;">Analisis Sentimen KNN & Naive Bayes</p>', unsafe_allow_html=True)
 
     page = st.sidebar.radio("", list(PAGES.keys()))
 
