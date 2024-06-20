@@ -7,13 +7,13 @@ def main():
 
     # Menambahkan penjelasan mengenai aplikasi
     st.markdown("""
-    
- Berikut adalah tahapan yang dilakukan dalam aplikasi ini:
+Aplikasi ini adalah program Python yang menggunakan library Streamlit, Pandas, NLTK, dan beberapa library lainnya. Aplikasi ini digunakan untuk melakukan analisis sentimen menggunakan InSet. Beberapa fitur yang tersedia di aplikasi ini antara lain:
                 
-    a. User mengunggah file kamus KBBI dalam format CSV, TXT, XLS, atau XLSX.
-    b. 
-    c. 
-
+    a. Memuat kamus positif dan negatif: Program memungkinkan pengguna untuk mengunggah file positive.csv dan negative.csv menggunakan st.file_uploader(). Setelah file-file tersebut diunggah, fungsi load_lexicon() akan digunakan untuk memuat kamus positif dan negatif dari file-file tersebut.
+    b. Memuat file CSV untuk analisis sentimen: Program memungkinkan pengguna untuk mengunggah file CSV yang akan dianalisis sentimen menggunakan st.file_uploader(). Jika file tersebut diunggah, file CSV akan dibaca dan dimasukkan ke dalam DataFrame menggunakan pd.read_csv().
+    c. Analisis sentimen menggunakan kamus: Program melakukan analisis sentimen pada teks yang ada dalam file CSV. Jika kolom 'tweet_clean' ada dalam DataFrame, analisis sentimen akan dilakukan pada kolom 'tweet_clean'. Jika kolom tersebut tidak ada, analisis sentimen akan dilakukan pada kolom 'text_clean'.
+    d. Menampilkan hasil analisis sentimen: Program menampilkan hasil analisis sentimen dalam bentuk jumlah polaritas positif, negatif, dan netral menggunakan st.write(). Hasil ini memberikan gambaran umum tentang sebaran sentimen dalam data.
+    
     """)
     
     st.markdown('<p style="font-family: Times New Roman; font-size: 25px; font-weight: bold;">Analisis Sentimen Menggunakan InSet</p>', unsafe_allow_html=True)
