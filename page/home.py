@@ -9,13 +9,14 @@ def main():
     st.markdown("""
     
  Berikut adalah tahapan yang dilakukan dalam aplikasi ini:
+                
     a. User mengunggah file kamus KBBI dalam format CSV, TXT, XLS, atau XLSX.
     b. 
     c. 
 
     """)
     
-    st.markdown('<p style="font-family: Times New Roman; font-size: 32px; font-weight: bold;">Analisis Sentimen Menggunakan InSet</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-family: Times New Roman; font-size: 25px; font-weight: bold;">Analisis Sentimen Menggunakan InSet</p>', unsafe_allow_html=True)
 
     # Menambahkan penjelasan mengenai aplikasi
     st.markdown("""
