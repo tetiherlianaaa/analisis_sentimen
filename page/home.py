@@ -2,14 +2,13 @@ import streamlit as st
     
 def main():
     st.title("BERANDA")
-    st.write("SELAMAT DATANG DI APLIKASI ANALISIS SENTIMEN!!!")
-    st.markdown('<p style="font-family: Times New Roman; font-size: 32px; font-weight: bold;">Pendeteksi Kata Slang</p>', unsafe_allow_html=True)
+    st.write("Selamat Datang Di Aplikasi Analisis Sentimen!!!")
+    st.markdown('<p style="font-family: Times New Roman; font-size: 25px; font-weight: bold;">Pendeteksi Kata Slang</p>', unsafe_allow_html=True)
 
     # Menambahkan penjelasan mengenai aplikasi
     st.markdown("""
     
  Berikut adalah tahapan yang dilakukan dalam aplikasi ini:
-
     a. User mengunggah file kamus KBBI dalam format CSV, TXT, XLS, atau XLSX.
     b. 
     c. 
