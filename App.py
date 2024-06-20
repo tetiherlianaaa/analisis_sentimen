@@ -53,13 +53,13 @@ def main():
     with st.spinner(f"Loading {page} ..."):
         PAGES[page].main()
     
-    st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">About App</p>', unsafe_allow_html=True)
+   #st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">About App</p>', unsafe_allow_html=True)
     
-    st.sidebar.info(
+    '''st.sidebar.info(
         """
 
         """
-    )
+    )'''
 
 if __name__ == "__main__":
     main()
