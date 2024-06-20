@@ -46,9 +46,10 @@ def set_page_config():
 def main():
     set_page_config()
 
-    st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">Analisis Sentimen</p>', unsafe_allow_html=True)
-    
-    page = st.sidebar.radio(" ", list(PAGES.keys()))
+    #st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold;">Analisis Sentimen</p>', unsafe_allow_html=True)
+    st.sidebar.markdown('<p style="font-family: Times New Roman; font-size: 24px; font-weight: bold; margin-top: 0; margin-bottom: 0;">Analisis Sentimen</p>', unsafe_allow_html=True)
+
+    page = st.sidebar.radio("", list(PAGES.keys()))
 
     with st.spinner(f"Loading {page} ..."):
         PAGES[page].main()
